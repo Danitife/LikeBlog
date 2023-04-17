@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../icofont/icofont.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <input id="title" type="text" placeholder="Title"><br><br>
+        <input id="content" type="text" placeholder="Content"><br><br>
+        <button onclick="publish()">Publish</button>
+        <div id="show"></div>
+    </main>
+</body>
+</html>
+
+<script>
+    let gotten = JSON.parse(localStorage.getItem("allPost"))
+    console.log(gotten);
+    function publish(){
+        let data = {
+            id: gotten.length+1,
+            title: title.value,
+            content: content.value,
+            isLiked: false
+        }
+        console.log(data);
+        if(gotten == null){
+            gotten = []
+            gotten.push(data)
+            localStorage.setItem("allPost", JSON.stringify(gotten));
+            showPost()
+        }else{
+            gotten.push(data)
+            localStorage.setItem("allPost", JSON.stringify(gotten));
+            showPost()
+        }
+    }
+    function showPost(){
+        if(gotten == null){
+            return;
+        }else{
+            show.innerHTML = ""
+            gotten.forEach((element, index) => {
+                show.innerHTML += `
+                    <h1>${element.title}</h1>
+                    <p>${element.content}</p>
+                `
+                if(element.isLiked == true){
+                    show.innerHTML += `
+                    <button style="background-color: tomato;" onclick="likePost(${element.id})">
+                        <i class="icofont-heart"></i>
+                    </button>
+                    `
+                }else{
+                    show.innerHTML += `
+                    <button onclick="likePost(${element.id})">
+                        <i class="icofont-heart"></i>
+                    </button>
+                    `
+                }
+            });
+        }
+    }
+    showPost()
+
+    function likePost(id){
+        let found = gotten.find(el=> el.id == id);
+        if(found.isLiked == false){
+            found.isLiked = true;
+            localStorage.setItem("allPost", JSON.stringify(gotten))
+            showPost()
+        }else{
+            found.isLiked = false;
+            localStorage.setItem("allPost", JSON.stringify(gotten))
+            showPost()
+        }
+        console.log(found);
+    }
+
+    function likedBlog(){
+        let myLiked = gotten.filter(el=> el.isLiked == true);
+        console.log(myLiked);
+    }
+    likedBlog()
+
+</script>
