@@ -66,19 +66,20 @@
         let errmm = myCart.some(ssmm => ssmm.id == found.id);
         console.log(errmm);
         if(errmm){
-            ev.target.innerHTML = "Add To Cart";
+            ev.target.innerHTML = "Not there... Add";
             let myIndex = myCart.indexOf(found)
             console.log(myIndex);
             myCart.splice(myIndex,1)
             localStorage.setItem("cart", JSON.stringify(myCart));
+            cartCount();
             return;
         }else{
-            ev.target.innerHTML = "Remove from Cart"
+            ev.target.innerHTML = "Already there... Remove"
             myCart.push(found);
             localStorage.setItem("cart", JSON.stringify(myCart));
+            cartCount();
         }
         console.log(myCart);
-        cartCount();
         displayGoods();
     }
 
